@@ -4,6 +4,8 @@ from utils import get_retrieval_precision_prompt
 import json
 import numpy as np
 import matplotlib.pyplot as plt
+import backoff
+import time
 
 OPENAI_API_KEY = os.getenv('OPENAI_CHROMA_API_KEY')
 
@@ -19,21 +21,28 @@ OPENAI_API_KEY = os.getenv('OPENAI_CHROMA_API_KEY')
 
 openai_ef = embedding_functions.OpenAIEmbeddingFunction(
                 api_key=OPENAI_API_KEY,
-                model_name="text-embedding-3-large"
+                model_name="text-embedding-ada-002"
             )
 
-collection = chroma_client.get_collection("chuck_8", embedding_function=openai_ef)
+collection = chroma_client.get_collection("chuck_10", embedding_function=openai_ef)
 
+# Setup backoff to retry on all exceptions
+@backoff.on_exception(backoff.expo,
+                      Exception,  # Broadly catching all exceptions
+                      max_tries=8)
 def get_retrieval_precision_indicator(question, context):
-    completion = client.chat.completions.create(
-        model="gpt-4-turbo",
-        messages=[
-            {"role": "system", "content": get_retrieval_precision_prompt(question, context)},
-            {"role": "user", "content": "Is this CONTEXT relavent?"}
-        ]
-        )
-    
-    return 1 if completion.choices[0].message.content.lower().strip() == 'true' else 0
+    try:
+        completion = client.chat.completions.create(
+            model="gpt-4-turbo",
+            messages=[
+                {"role": "system", "content": get_retrieval_precision_prompt(question, context)},
+                {"role": "user", "content": "Is this CONTEXT relavent?"}
+            ]
+            )
+        return 1 if completion.choices[0].message.content.lower().strip() == 'true' else 0
+    except Exception as e:
+        print(f"Error: {e}")
+        raise e
 
 with open('eval_questions/eval_data.json') as f:
     eval_data = json.load(f)
@@ -54,11 +63,16 @@ def get_results_row():
     return [precision_at_1, precision_at_2, precision_at_3, precision_at_4, precision_at_5]
 
 from concurrent.futures import ThreadPoolExecutor
+def execute_threads(num_tasks):
+    with ThreadPoolExecutor(max_workers=num_tasks) as executor:
+        futures = [executor.submit(get_results_row) for _ in range(num_tasks)]
+        return [future.result() for future in futures]
 
 def main():
-    with ThreadPoolExecutor(max_workers=8) as executor:
-        futures = [executor.submit(get_results_row) for _ in range(8)]
-        results = [future.result() for future in futures]
+    results = execute_threads(4)
+    print("First 4 threads")
+    time.sleep(30)
+    results += execute_threads(4)
     print(results)
     # Create a list of all trials
     all_trials = results
@@ -71,7 +85,7 @@ def main():
 
     # Create the boxplot
     plt.boxplot(precision_at_each_rank, vert=False, labels=labels)
-    plt.title('Boxplot of Precision@K for GPT-4-Turbo')
+    plt.title('Boxplot of Precision@K for GPT-4-Turbo, Ada-002')
     plt.xlabel('Precision')
     plt.ylabel('Rank')
     plt.show()
@@ -79,3 +93,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+# GPT-4-Turbo, Ada-002
+# [[0.8411214953271028, 0.8130841121495327, 0.8193146417445484, 0.8107476635514018, 0.7943925233644858], [0.8504672897196262, 0.8364485981308412, 0.8317757009345795, 0.8107476635514018, 0.7831775700934579], [0.8317757009345794, 0.8364485981308412, 0.8286604361370715, 0.8107476635514018, 0.7906542056074765], [0.8504672897196262, 0.8271028037383178, 0.8286604361370717, 0.8271028037383178, 0.8056074766355139], [0.8317757009345794, 0.8271028037383178, 0.8286604361370717, 0.8107476635514018, 0.7887850467289718], [0.8504672897196262, 0.8317757009345794, 0.8317757009345794, 0.8200934579439252, 0.7981308411214953], [0.8504672897196262, 0.8271028037383178, 0.8286604361370717, 0.8130841121495327, 0.7869158878504673], [0.8317757009345794, 0.8271028037383178, 0.822429906542056, 0.8107476635514018, 0.7831775700934578]]

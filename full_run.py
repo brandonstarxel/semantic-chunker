@@ -72,19 +72,19 @@ class CollectionWriter:
 
 from langchain_text_splitters import RecursiveCharacterTextSplitter, TokenTextSplitter
 
-# splitter = RecursiveCharacterTextSplitter(
-#     # chunk_size=1024,
-#     # chunk_overlap=256,
-#     chunk_size=400,
-#     chunk_overlap=0,
-#     length_function=num_tokens_from_string
-# )
-
-splitter = TokenTextSplitter(
-    encoding_name="cl100k_base",
-    chunk_size=512,
-    chunk_overlap=50,
+splitter = RecursiveCharacterTextSplitter(
+    # chunk_size=1024,
+    # chunk_overlap=256,
+    chunk_size=400,
+    chunk_overlap=200,
+    length_function=num_tokens_from_string
 )
+
+# splitter = TokenTextSplitter(
+#     encoding_name="cl100k_base",
+#     chunk_size=512,
+#     chunk_overlap=50,
+# )
 
 collection_writer = CollectionWriter()
 
@@ -92,4 +92,4 @@ def chunking_function(content):
     return splitter.split_text(content)
 
 # chunked_collection = collection_writer.trial_run("chuck_1", chunking_function)
-chunked_collection = collection_writer.write_to_collection("chuck_9", chunking_function)
+chunked_collection = collection_writer.write_to_collection("chuck_12", chunking_function)
