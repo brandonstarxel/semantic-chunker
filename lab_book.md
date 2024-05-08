@@ -61,3 +61,39 @@ Here's a table that organizes the data you provided, grouping them by their setu
 | None        | TokenTextSplitter             | 400        | 200           | embedding-3-small   | 0.879  | 0.925 |
 | None        | RecursiveCharacterTextSplitter | 400        | 0             | embedding-3-small   | 0.857  | 0.907 |
 | None       | TokenTextSplitter             | 400        | 0             | embedding-3-small   | 0.807  | 0.888 |
+
+New IoC scores and Recall Scores:
+
+| Setup                     | Text Splitter                 | Chunk Size | Chunk Overlap | Embedding          | IoC  | Recall |
+|---------------------------|-------------------------------|------------|---------------|--------------------|--------|--------|
+| ARAGOG            | TokenTextSplitter             | 512        | 50            | text-embedding-3-large | 0.170 ± 0.100  | 0.893 ± 0.280 |
+| OpenAI        | RecursiveCharacterTextSplitter | 400        | 200           | embedding-3-large   | 0.197 ± 0.096  | 0.924 ± 0.222 |
+| None        | TokenTextSplitter | 400        | 200           | embedding-3-large   | 0.177 ± 0.093  | 0.883 ± 0.243 |
+| None        | RecursiveCharacterTextSplitter | 400        | 0             | embedding-3-large   | 0.235 ± 0.113 | 0.901 ± 0.229 |
+| None       | TokenTextSplitter             | 400        | 0             | embedding-3-large   | 0.226 ± 0.112  | 0.874 ± 0.252 |
+
+| Setup                     | Text Splitter                 | Chunk Size | Chunk Overlap | Embedding          | IoC  | Recall |
+|---------------------------|-------------------------------|------------|---------------|--------------------|--------|--------|
+| ARAGOG | TokenTextSplitter | 512 | 50 | text-embedding-3-large | 0.144 ± 0.089 | 0.937 ± 0.241 |
+| OpenAI | RecursiveCharacterTextSplitter | 400 | 200 | text-embedding-3-large | 0.154 ± 0.090 | 0.950 ± 0.211 |
+| None | TokenTextSplitter | 400 | 200 | text-embedding-3-large | 0.137 ± 0.066 | 0.965 ± 0.161 |
+| None | RecursiveCharacterTextSplitter | 400 | 0 | text-embedding-3-large | 0.203 ± 0.114 | 0.961 ± 0.181 |
+| None | TokenTextSplitter | 400 | 0 | text-embedding-3-large | 0.182 ± 0.096 | 0.967 ± 0.158 |
+
+
+| Setup                     | Text Splitter                 | Chunk Size | Chunk Overlap | Embedding          | IoC  | Recall |
+|---------------------------|-------------------------------|------------|---------------|--------------------|--------|--------|
+| ARAGOG | TokenTextSplitter | 512 | 50 | text-embedding-3-large | 0.121 ± 0.089 | 0.947 ± 0.221 |
+| OpenAI | RecursiveCharacterTextSplitter | 400 | 200 | text-embedding-3-large | 0.129 ± 0.090 | 0.956 ± 0.199 |
+| None | TokenTextSplitter | 400 | 200 | text-embedding-3-large | 0.115 ± 0.070 | 0.967 ± 0.160 |
+| None | RecursiveCharacterTextSplitter | 400 | 0 | text-embedding-3-large | 0.169 ± 0.117 | 0.953 ± 0.204 |
+| None | TokenTextSplitter | 400 | 0 | text-embedding-3-large | 0.155 ± 0.098 | 0.975 ± 0.139 |
+
+
+| Setup                     | Text Splitter                 | Chunk Size | Chunk Overlap | Embedding          | IoC  | Recall | Brute IoC | Brute Recall |
+|---------------------------|-------------------------------|------------|---------------|--------------------|--------|--------|-----|-----|
+| ARAGOG | TokenTextSplitter | 512 | 50 | text-embedding-3-large | 0.085 ± 0.058 | 0.998 ± 0.020 | 0.083 ± 0.056 | 1.000 ± 0.000 |
+| OpenAI | RecursiveCharacterTextSplitter | 400 | 200 | text-embedding-3-large | 0.083 ± 0.051 | 0.990 ± 0.101 | 0.083 ± 0.054 | 1.000 ± 0.000 |
+| None | TokenTextSplitter | 400 | 200 | text-embedding-3-large | 0.078 ± 0.052 | 0.986 ± 0.106 | 0.077 ± 0.051 | 1.000 ± 0.000 |
+| None | RecursiveCharacterTextSplitter | 400 | 0 | text-embedding-3-large | 0.118 ± 0.076 | 0.986 ± 0.106 | 0.116 ± 0.071 | 1.000 ± 0.001 |
+| None | TokenTextSplitter | 400 | 0 | text-embedding-3-large | 0.111 ± 0.079 | 0.990 ± 0.101 | 0.112 ± 0.078 | 1.000 ± 0.000 |
