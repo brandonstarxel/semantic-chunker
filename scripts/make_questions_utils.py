@@ -46,6 +46,7 @@ Response: {
 }
 
 DO NOT USE THE WORD 'and' IN THE QUESTION UNLESS IT IS PART OF A PROPER NOUN. YOU MUST INCLUDE THE OATH ABOVE IN YOUR RESPONSE.
+YOU MUST ALSO NOT REPEAT A QUESTION THAT HAS ALREADY BEEN USED.
 """
 
 # def normalize_text(input_text: str) -> str:
@@ -152,7 +153,7 @@ def extract_question_and_references(corpus, text_description, document_length=40
         max_tokens=600,
         messages=[
             {"role": "system", "content": question_maker_prompt},
-            {"role": "user", "content": f"Text Description:{text_description}\n\nText: {document}\n\nThe following questions have already been used. Do not repeat them:{prev_questions_str}\n\nRespond with references and a question in JSON. DO NOT USE THE WORD 'and' IN THE QUESTION UNLESS IT IS PART OF A PROPER NOUN."}
+            {"role": "user", "content": f"Text Description:{text_description}\n\nText: {document}\n\nThe following questions have already been used. Do not repeat them:{prev_questions_str}\n\n Do not repeat the above questions. Make your next question unique. Respond with references and a question in JSON. DO NOT USE THE WORD 'and' IN THE QUESTION UNLESS IT IS PART OF A PROPER NOUN."}
         ]
     )
     
