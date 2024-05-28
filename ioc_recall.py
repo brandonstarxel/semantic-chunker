@@ -300,8 +300,8 @@ class IoCRecall:
 
         ioc_mean = np.mean(ioc_scores)
         ioc_std = np.std(ioc_scores)
-        ioc_text = f"{ioc_mean:.5f} ± {ioc_std:.5f}"
-        # ioc_text = f"{ioc_mean:.3f} ± {ioc_std:.3f}"
+        # ioc_text = f"{ioc_mean:.5f} ± {ioc_std:.5f}"
+        ioc_text = f"{ioc_mean:.3f} ± {ioc_std:.3f}"
 
         brute_ioc_mean = np.mean(brute_ioc_scores)
         brute_ioc_std = np.std(brute_ioc_scores)
@@ -309,8 +309,8 @@ class IoCRecall:
 
         recall_mean = np.mean(recall_scores)
         recall_std = np.std(recall_scores)
-        recall_text = f"{recall_mean:.5f} ± {recall_std:.5f}"
-        # recall_text = f"{recall_mean:.3f} ± {recall_std:.3f}"
+        # recall_text = f"{recall_mean:.5f} ± {recall_std:.5f}"
+        recall_text = f"{recall_mean:.3f} ± {recall_std:.3f}"
 
         brute_recall_mean = np.mean(brute_recall_scores)
         brute_recall_std = np.std(brute_recall_scores)

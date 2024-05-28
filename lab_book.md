@@ -178,7 +178,19 @@ Re-runs:
 | LangChain | SemanticChunker | 0 | 0 | text-embedding-3-large | 0.073 ± 0.104 | 0.824 ± 0.379 | 0.079 ± 0.097 | 0.998 ± 0.032 |
 | ChromaDB | SemanticChunker | 400 (~242) | 0 | text-embedding-3-large | 0.165 ± 0.127 | 0.897 ± 0.290 | 0.182 ± 0.127 | 0.999 ± 0.004 |
 | ChromaDB | SemanticChunker | 200 (~133) | 0 | text-embedding-3-large | 0.260 ± 0.195 | 0.815 ± 0.366 | 0.299 ± 0.174 | 0.999 ± 0.006 |
+| LangChainXChroma | GregImprovedChunker | 300 | 0 | text-embedding-3-large | 0.123 ± 0.132 | 0.842 ± 0.349 | 0.135 ± 0.128 | 0.999 ± 0.002 |
+| Pinecone | PineconeExampleChunker | 300 | 0 | text-embedding-3-large | 0.158 ± 0.138 | 0.853 ± 0.342 | 0.180 ± 0.130 | 1.000 ± 0.002 |
+| AurelioLabs | StatisticalSemanticChunker | 300 (~258) | 0 | text-embedding-3-large | 0.186 ± 0.160 | 0.830 ± 0.364 | 0.216 ± 0.147 | 0.999 ± 0.003 |
 
+Pinecone:
+Mean Token Count: 333.8165137614679
+Median Token Count: 292.0
+Standard Deviation of Token Count: 197.72944316326928
+
+AurelioLabs Chunker:
+Mean Token Count: 277.6234096692112
+Median Token Count: 258.0
+Standard Deviation of Token Count: 176.3530674679
 
 
 | None | RecursiveCharacterTextSplitter | 242 | 0 | text-embedding-3-large | 0.23225 ± 0.19710 | 0.82827 ± 0.36544 | 0.267 ± 0.177 | 0.999 ± 0.002 |
@@ -201,3 +213,15 @@ Median: 149.0
 Min: 1
 Max: 201
 Standard Deviation: 62.99149769847911
+
+
+
+
+| Corpus ID                     | Text Splitter                 | Chunk Size | Chunk Overlap | Embedding          | IoU  | Recall | Brute IoU | Brute Recall |
+|---------------------------|-------------------------------|------------|---------------|--------------------|--------|--------|-----|-----|
+| Wikitexts | GreggImprovedChunker | 300 | 0 | text-embedding-3-large | 0.013 ± 0.072 | 0.029 ± 0.154 | 0.542 ± 0.207 | 0.996 ± 0.005 |
+| State of the union | GreggImprovedChunker | 300 | 0 | text-embedding-3-large | 0.464 ± 0.237 | 0.938 ± 0.171 | 0.489 ± 0.228 | 0.995 ± 0.010 |
+| Chatlogs | GreggImprovedChunker | 300 | 0 | text-embedding-3-large | 0.016 ± 0.078 | 0.029 ± 0.139 | 0.486 ± 0.161 | 0.996 ± 0.002 |
+| Finance | GreggImprovedChunker | 300 | 0 | text-embedding-3-large | 0.000 ± 0.000 | 0.000 ± 0.000 | 0.427 ± 0.239 | 0.998 ± 0.003 |
+| Pubmed | GreggImprovedChunker | 300 | 0 | text-embedding-3-large | 0.003 ± 0.037 | 0.009 ± 0.094 | 0.498 ± 0.231 | 0.997 ± 0.007 |
+| All | GreggImprovedChunker | 300 | 0 | text-embedding-3-large | 0.379 ± 0.269 | 0.707 ± 0.383 | 0.496 ± 0.220 | 0.997 ± 0.006 |

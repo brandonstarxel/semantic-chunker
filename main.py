@@ -3,7 +3,8 @@ from utils import num_tokens_from_string
 from langchain_text_splitters import RecursiveCharacterTextSplitter, TokenTextSplitter
 # from langchain_experimental.text_splitter import SemanticChunker
 from langchain_openai.embeddings import OpenAIEmbeddings
-from chroma_chunkers import SemanticChunker
+from chroma_chunkers import ClusterChunker, GregImprovedChunker, PineconeExampleChunker, AurelioLabsStatisticalChunker, LlamaTextChunker
+import os
 
 # text_splitter = SemanticChunker(OpenAIEmbeddings())
 
@@ -12,11 +13,15 @@ splitter_configurations = [
     # ("ARAGOG", TokenTextSplitter, 512, 50, "cl100k_base"),
     # ("OpenAI", RecursiveCharacterTextSplitter, 400, 200, "cl100k_base"),
     # ("None", TokenTextSplitter, 400, 200, "cl100k_base"),
-    ("None", RecursiveCharacterTextSplitter, 133, 0, "cl100k_base"),
-    ("None", TokenTextSplitter, 133, 0, "cl100k_base"),
+    # ("None", RecursiveCharacterTextSplitter, 133, 0, "cl100k_base"),
+    # ("None", TokenTextSplitter, 133, 0, "cl100k_base"),
     # ("LangChain", SemanticChunker, 0, 0, "cl100k_base")
-    # ("None", SemanticChunker, 400, 0, "cl100k_base"),
-    # ("None", SemanticChunker, 200, 0, "cl100k_base"),
+    # ("None", ClusterChunker, 400, 0, "cl100k_base"),
+    # ("None", ClusterChunker, 200, 0, "cl100k_base"),
+    # ("None", GregImprovedChunker, 300, 0, "cl100k_base"),
+    # ("None", PineconeExampleChunker, 300, 0, "cl100k_base"),
+    # ("None", AurelioLabsStatisticalChunker, 300, 0, "cl100k_base"),
+    ("None", LlamaTextChunker, 300, 0, "cl100k_base"),
 
     # ("None", TokenTextSplitter, 400, 0, "cl100k_base"),
     # ("None", TokenTextSplitter, 400, 0, "cl100k_base"),
@@ -29,8 +34,10 @@ splitter_configurations = [
 
 print("Warning: metadata will be incorrect if a chunk is repeated since we use .find() to find the start index. This isn't pratically an issue for chunks over 1000 characters.")
 
-# ioc_recall = IoCRecall(corpus_list=['wikitexts'])
-ioc_recall = IoCRecall()
+OPENAI_API_KEY = os.getenv('OPENAI_CHROMA_API_KEY')
+
+# ioc_recall = IoCRecall()
+ioc_recall = IoCRecall(corpus_list=['wikitexts'])
 
 # for name, splitter_type, chunk_size, chunk_overlap, encoding_name in reversed(splitter_configurations):
 for name, splitter_type, chunk_size, chunk_overlap, encoding_name in splitter_configurations:
@@ -46,9 +53,17 @@ for name, splitter_type, chunk_size, chunk_overlap, encoding_name in splitter_co
             chunk_overlap=chunk_overlap,
             length_function=num_tokens_from_string
         )
-    elif splitter_type == SemanticChunker:
+    elif splitter_type == ClusterChunker:
         # splitter = SemanticChunker(OpenAIEmbeddings())
-        splitter = SemanticChunker(max_chunk_size=chunk_size)
+        splitter = ClusterChunker(max_chunk_size=chunk_size)
+    elif splitter_type == GregImprovedChunker:
+        splitter = GregImprovedChunker(avg_chunk_size=chunk_size)
+    elif splitter_type == PineconeExampleChunker:
+        splitter = PineconeExampleChunker(OPENAI_API_KEY=OPENAI_API_KEY)
+    elif splitter_type == AurelioLabsStatisticalChunker:
+        splitter = AurelioLabsStatisticalChunker(OPENAI_API_KEY=OPENAI_API_KEY)
+    elif splitter_type == LlamaTextChunker:
+        splitter = LlamaTextChunker()
 
     # ioc_score, recall_score, brute_ioc_score, brute_recall_score = score_chunker(splitter)
     ioc_score, recall_score, brute_ioc_score, brute_recall_score = ioc_recall.score_chunker(splitter, BERT=False)
