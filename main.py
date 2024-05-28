@@ -1,7 +1,7 @@
 from ioc_recall import IoCRecall
 from utils import num_tokens_from_string
 from langchain_text_splitters import RecursiveCharacterTextSplitter, TokenTextSplitter
-# from langchain_experimental.text_splitter import SemanticChunker
+from langchain_experimental.text_splitter import SemanticChunker
 from langchain_openai.embeddings import OpenAIEmbeddings
 from chroma_chunkers import ClusterChunker, GregImprovedChunker, PineconeExampleChunker, AurelioLabsStatisticalChunker, LlamaTextChunker
 import os
@@ -10,18 +10,18 @@ import os
 
 
 splitter_configurations = [
-    # ("ARAGOG", TokenTextSplitter, 512, 50, "cl100k_base"),
-    # ("OpenAI", RecursiveCharacterTextSplitter, 400, 200, "cl100k_base"),
-    # ("None", TokenTextSplitter, 400, 200, "cl100k_base"),
-    # ("None", RecursiveCharacterTextSplitter, 133, 0, "cl100k_base"),
-    # ("None", TokenTextSplitter, 133, 0, "cl100k_base"),
+    ("ARAGOG", TokenTextSplitter, 512, 50, "cl100k_base"),
+    ("OpenAI", RecursiveCharacterTextSplitter, 400, 200, "cl100k_base"),
+    ("None", TokenTextSplitter, 400, 200, "cl100k_base"),
+    ("None", RecursiveCharacterTextSplitter, 133, 0, "cl100k_base"),
+    ("None", TokenTextSplitter, 133, 0, "cl100k_base"),
     # ("LangChain", SemanticChunker, 0, 0, "cl100k_base")
-    # ("None", ClusterChunker, 400, 0, "cl100k_base"),
-    # ("None", ClusterChunker, 200, 0, "cl100k_base"),
+    ("None", ClusterChunker, 400, 0, "cl100k_base"),
+    ("None", ClusterChunker, 200, 0, "cl100k_base"),
     # ("None", GregImprovedChunker, 300, 0, "cl100k_base"),
     # ("None", PineconeExampleChunker, 300, 0, "cl100k_base"),
     # ("None", AurelioLabsStatisticalChunker, 300, 0, "cl100k_base"),
-    ("None", LlamaTextChunker, 300, 0, "cl100k_base"),
+    # ("None", LlamaTextChunker, 300, 0, "cl100k_base"),
 
     # ("None", TokenTextSplitter, 400, 0, "cl100k_base"),
     # ("None", TokenTextSplitter, 400, 0, "cl100k_base"),
@@ -36,8 +36,8 @@ print("Warning: metadata will be incorrect if a chunk is repeated since we use .
 
 OPENAI_API_KEY = os.getenv('OPENAI_CHROMA_API_KEY')
 
-# ioc_recall = IoCRecall()
-ioc_recall = IoCRecall(corpus_list=['wikitexts'])
+ioc_recall = IoCRecall()
+# ioc_recall = IoCRecall(corpus_list=['wikitexts'])
 
 # for name, splitter_type, chunk_size, chunk_overlap, encoding_name in reversed(splitter_configurations):
 for name, splitter_type, chunk_size, chunk_overlap, encoding_name in splitter_configurations:
