@@ -3,30 +3,31 @@ from utils import num_tokens_from_string
 from langchain_text_splitters import RecursiveCharacterTextSplitter, TokenTextSplitter
 from langchain_experimental.text_splitter import SemanticChunker
 from langchain_openai.embeddings import OpenAIEmbeddings
-from chroma_chunkers import ClusterChunker, GregImprovedChunker, PineconeExampleChunker, AurelioLabsStatisticalChunker, LlamaTextChunker
+from chroma_chunkers import ClusterChunker, GregImprovedChunker, PineconeExampleChunker, AurelioLabsStatisticalChunker, GPTTextChunker
 import os
 
 # text_splitter = SemanticChunker(OpenAIEmbeddings())
 
 
 splitter_configurations = [
-    ("ARAGOG", TokenTextSplitter, 512, 50, "cl100k_base"),
-    ("OpenAI", RecursiveCharacterTextSplitter, 400, 200, "cl100k_base"),
-    ("None", TokenTextSplitter, 400, 200, "cl100k_base"),
-    ("None", RecursiveCharacterTextSplitter, 133, 0, "cl100k_base"),
-    ("None", TokenTextSplitter, 133, 0, "cl100k_base"),
+    # ("ARAGOG", TokenTextSplitter, 512, 50, "cl100k_base"),
+    # ("OpenAI", RecursiveCharacterTextSplitter, 400, 200, "cl100k_base"),
+    # ("None", TokenTextSplitter, 400, 200, "cl100k_base"),
+    # ("None", RecursiveCharacterTextSplitter, 133, 0, "cl100k_base"),
+    # ("None", TokenTextSplitter, 133, 0, "cl100k_base"),
     # ("LangChain", SemanticChunker, 0, 0, "cl100k_base")
-    ("None", ClusterChunker, 400, 0, "cl100k_base"),
-    ("None", ClusterChunker, 200, 0, "cl100k_base"),
+    # ("None", ClusterChunker, 400, 0, "cl100k_base"),
+    # ("None", ClusterChunker, 200, 0, "cl100k_base"),
     # ("None", GregImprovedChunker, 300, 0, "cl100k_base"),
     # ("None", PineconeExampleChunker, 300, 0, "cl100k_base"),
     # ("None", AurelioLabsStatisticalChunker, 300, 0, "cl100k_base"),
-    # ("None", LlamaTextChunker, 300, 0, "cl100k_base"),
+    # ("None", GPTTextChunker, 300, 0, "cl100k_base"),
 
     # ("None", TokenTextSplitter, 400, 0, "cl100k_base"),
     # ("None", TokenTextSplitter, 400, 0, "cl100k_base"),
     # ("None", TokenTextSplitter, 400, 0, "cl100k_base"),
     # ("None", TokenTextSplitter, 200, 0, "cl100k_base"),
+    ("None", RecursiveCharacterTextSplitter, 200, 0, "cl100k_base"),
     # ("None", TokenTextSplitter, 100, 0, "cl100k_base"),
     # ("None", TokenTextSplitter, 50, 0, "cl100k_base"),
     # ("None", TokenTextSplitter, 25, 0, "cl100k_base"),
@@ -53,8 +54,9 @@ for name, splitter_type, chunk_size, chunk_overlap, encoding_name in splitter_co
             chunk_overlap=chunk_overlap,
             length_function=num_tokens_from_string
         )
-    elif splitter_type == ClusterChunker:
-        # splitter = SemanticChunker(OpenAIEmbeddings())
+    # elif splitter_type == ClusterChunker:
+    elif splitter_type == SemanticChunker:
+        splitter = SemanticChunker(OpenAIEmbeddings())
         splitter = ClusterChunker(max_chunk_size=chunk_size)
     elif splitter_type == GregImprovedChunker:
         splitter = GregImprovedChunker(avg_chunk_size=chunk_size)
@@ -62,8 +64,8 @@ for name, splitter_type, chunk_size, chunk_overlap, encoding_name in splitter_co
         splitter = PineconeExampleChunker(OPENAI_API_KEY=OPENAI_API_KEY)
     elif splitter_type == AurelioLabsStatisticalChunker:
         splitter = AurelioLabsStatisticalChunker(OPENAI_API_KEY=OPENAI_API_KEY)
-    elif splitter_type == LlamaTextChunker:
-        splitter = LlamaTextChunker()
+    elif splitter_type == GPTTextChunker:
+        splitter = GPTTextChunker()
 
     # ioc_score, recall_score, brute_ioc_score, brute_recall_score = score_chunker(splitter)
     ioc_score, recall_score, brute_ioc_score, brute_recall_score = ioc_recall.score_chunker(splitter, BERT=False)
